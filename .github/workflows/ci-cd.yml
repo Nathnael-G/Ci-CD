@@ -33,10 +33,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run SonarQube analysis (configure SonarQube)
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  
+
+      - name: Install SonarQube scanner
+        uses: nosinovacao/sonarscanner-action@v1
+        with:
+          version: '6.1.0.4477'
+          javaDistribution: 'temurin'
+          javaVersion: '11' 
+
+      - name: Run SonarQube analysis
         run: |
-          # Assuming SonarQube is set up and accessible
-          sonar-scanner -Dsonar.projectKey=my-app -Dsonar.sources=. 
+          sonar-scanner \
+            -Dsonar.projectKey=my-app \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
 
   dynamic-analysis:
     runs-on: ubuntu-latest
