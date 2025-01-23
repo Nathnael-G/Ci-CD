@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install flask
+
+      - name: Run tests (add your test command here)
+        run: |
+          echo "Running tests..."
+
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run SonarQube analysis (configure SonarQube)
+        run: |
+          # Assuming SonarQube is set up and accessible
+          sonar-scanner -Dsonar.projectKey=my-app -Dsonar.sources=. 
+
+  dynamic-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run OWASP ZAP (configure ZAP)
+        run: |
+          docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:5000 -r zap_report.html 
