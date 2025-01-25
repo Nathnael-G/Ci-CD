@@ -41,7 +41,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          pytest tests/  
+          py -m pytest tests/  
 
   static-analysis:
     runs-on: ubuntu-latest
