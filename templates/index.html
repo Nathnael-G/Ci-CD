@@ -4,16 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greeting App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #b69d56, #712347);
+            background-size: 200% 200%;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            animation: backgroundAnimation 10s linear infinite;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1.fadeIn {
+            background: linear-gradient(135deg, #af4261, #f3ec78); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            background: linear-gradient(1135deg, #af4261, #f3ec78);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            background: linear-gradient(135deg, #f3ec78, #af4261);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: slideInForm 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .greeting {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 75px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: slideInGreeting 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 130px;
+        }
+
+        label {
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #f3ec78, #af4261);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        input[type="text"] {
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #af4261, #f3ec78);
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #f3ec78, #af4261);
+            transform: scale(1.05);
+            color: #333;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInForm {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInGreeting {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }}
+    </style>
 </head>
-<body>
+<div>
     <h1>Welcome to the Greeting App!</h1>
+    <div class="container">
     <form method="POST">
         <label for="name">Enter your name:</label>
         <input type="text" id="name" name="name" required>
         <button type="submit">Submit</button>
     </form>
     {% if greeting %}
-        <h2>{{ greeting }}</h2>
+        <div class="greeting">
+            <h2>{{ greeting }}</h2>
+        </div>
     {% endif %}
+    </div>
+    <script>
+        window.onload = function() {
+            if (!sessionStorage.getItem('formSubmitted')) {
+                document.getElementById('heading').classList.add('fadeIn');
+            }
+
+            const form = document.querySelector('form');
+            const greetingDiv = document.getElementById('greetingDiv');
+            if (greetingDiv) {
+                greetingDiv.style.width = form.offsetWidth + 'px';
+                greetingDiv.style.height = form.offsetHeight + 'px';
+            }
+        };
+    </script>
 </body>
 </html>
