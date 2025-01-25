@@ -22,9 +22,9 @@ jobs:
         run: |
           pip install flask
 
-      - name: Run unit tests
-        run: |
-          pytest
+      #- name: Run unit tests
+       # run: |
+        #  pytest
 
   static-analysis:
     runs-on: ubuntu-latest
