@@ -51,18 +51,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install SonarQube Scanner
-        run: |
-          curl -sS https://get.sonarsource.com/sonar-scanner-cli-4.6.2.2472-linux.zip | unzip -
-          export PATH=$PATH:$GITHUB_WORKSPACE/sonar-scanner-4.6.2.2472-linux/bin
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
 
-      - name: Run SonarQube analysis
+      - name: Install dependencies
         run: |
-          sonar-scanner \
-            -Dsonar.projectKey=my-app \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          pip install -r requirements.txt
+
+      - name: Run Pylint
+        run: |
+          pylint app.py tests/test_app.py
 
   dynamic-analysis:
     runs-on: ubuntu-latest
