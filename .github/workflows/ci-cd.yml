@@ -74,11 +74,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run OWASP ZAP
-
+      - name: Start application
         run: |
-          docker run upmcedlp/owasp_zap2docker_weekly zap-baseline.py -t http://localhost:5000 -r zap_report.html
+          nohup python app.py &  # Start your Flask app in the background
 
-      - name: Display OWASP ZAP Report
+      - name: Run OWASP ZAP scan (using Docker)
+        run: |
+          docker run --rm -d --name zap \
+            -p 8080:8080 \
+            owasp/zap2docker-stable:latest zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
 
-        run: cat zap_report.html
+      - name: Wait for ZAP to start
+        run: |
+          sleep 30  # Adjust this time as necessary for ZAP to start up
+
+      - name: Run scan against the application
+        run: |
+          curl --proxy http://localhost:8080 http://localhost:5000 > zap_scan_report.txt
+
+      - name: Stop OWASP ZAP container
+        run: |
+          docker stop zap
