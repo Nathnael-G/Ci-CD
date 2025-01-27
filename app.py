@@ -5,9 +5,10 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 @app.after_request
-def set_x_frame_options(response):
-    """Set X-Frame-Options header to prevent clickjacking."""
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Change to 'DENY' if you want to disallow all framing
+def set_security_headers(response):
+    """Set security headers to prevent clickjacking and content type sniffing."""
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Prevents clickjacking
+    response.headers['X-Content-Type-Options'] = 'nosniff'  # Prevents MIME type sniffing
     return response
 
 @app.route("/", methods=["GET", "POST"])
