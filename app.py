@@ -5,6 +5,12 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 @app.after_request
+def remove_server_header(response):
+    """Remove or modify the Server header."""
+    response.headers.pop('Server', None)  # Remove the Server header if it exists
+    return response
+
+@app.after_request
 def set_security_headers(response):
     """Set security headers to prevent clickjacking, 
     content type sniffing, and improve site isolation."""
