@@ -6,9 +6,10 @@ app = Flask(__name__)
 
 @app.after_request
 def set_security_headers(response):
-    """Set security headers to prevent clickjacking and content type sniffing."""
+    """Set security headers to prevent clickjacking, content type sniffing, and define permissions policy."""
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Prevents clickjacking
     response.headers['X-Content-Type-Options'] = 'nosniff'  # Prevents MIME type sniffing
+    response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(), camera=()'  # Adjust as needed
     return response
 
 @app.route("/", methods=["GET", "POST"])
