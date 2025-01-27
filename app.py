@@ -1,8 +1,21 @@
 """Greeting application module."""
 
 from flask import Flask, render_template, request
+from flask_talisman import Talisman
 
 app = Flask(__name__)
+
+# Set up Talisman with a strict Content Security Policy
+csp = {
+    'default-src': "'self'",  # Allow content only from the same origin
+    'script-src': "'self'",    # Allow scripts only from the same origin
+    'img-src': "'self' data:",  # Allow images from the same origin and inline images
+    'style-src': "'self' 'unsafe-inline'",  # Allow styles from the same origin and inline styles (be cautious with inline)
+    'object-src': "'none'",    # Disallow all object sources
+    'frame-ancestors': "'none'" # Prevent any framing of this content
+}
+
+Talisman(app, content_security_policy=csp)
 
 @app.after_request
 def remove_server_header(response):
@@ -12,14 +25,12 @@ def remove_server_header(response):
 
 @app.after_request
 def set_security_headers(response):
-    """Set security headers to prevent clickjacking, 
-    content type sniffing, and improve site isolation."""
+    """Set additional security headers."""
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Prevents clickjacking
     response.headers['X-Content-Type-Options'] = 'nosniff'  # Prevents MIME type sniffing
     response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(), camera=()'  # Control feature access
     response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'  # Enforce COEP
     response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'  # Enforce COOP
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'"  # Set CSP
     return response
 
 @app.route("/", methods=["GET", "POST"])
