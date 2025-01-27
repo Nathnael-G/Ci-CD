@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 @app.after_request
 def remove_server_header(response):
-    """Remove or modify the Server header."""
     response.headers.pop('Server', None)  # Remove the Server header if it exists
     return response
 
