@@ -67,8 +67,8 @@ jobs:
           pylint app.py tests/test_app.py
 
   dynamic-analysis:
-  runs-on: ubuntu-latest
-  needs: build
+    runs-on: ubuntu-latest
+    needs: build
 
   steps:
     - name: Checkout code
