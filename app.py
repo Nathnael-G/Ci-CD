@@ -16,10 +16,9 @@ def set_security_headers(response):
     content type sniffing, and improve site isolation."""
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Prevents clickjacking
     response.headers['X-Content-Type-Options'] = 'nosniff'  # Prevents MIME type sniffing
-    response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(), camera=()'  # Control feature access
+    response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(), camera=()'
     response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'  # Enforce COEP
     response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'  # Enforce COOP
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'none'"  # Set CSP
     return response
 
 @app.route("/", methods=["GET", "POST"])
