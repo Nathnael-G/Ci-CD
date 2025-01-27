@@ -81,7 +81,7 @@ jobs:
       - name: Run OWASP ZAP
         uses: zaproxy/action-full-scan@v0.7.0
         with:
-          target: '127.0.0.1:5000'
+          target: 'http://127.0.0.1:5000'
       
       - name: OWASP ZAP Report
         uses: actions/upload-artifact@v3
